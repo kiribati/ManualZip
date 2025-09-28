@@ -10,9 +10,11 @@ import SwiftData
 
 @main
 struct ManualZipSwiftUIApp: App {
+    @State private var isIntroShown = false
+    
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
-            Item.self,
+            ManualItem.self,
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
@@ -25,7 +27,13 @@ struct ManualZipSwiftUIApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            if isIntroShown {
+                IntroView {
+                    isIntroShown = false
+                }
+            } else {
+                HomeView()
+            }
         }
         .modelContainer(sharedModelContainer)
     }

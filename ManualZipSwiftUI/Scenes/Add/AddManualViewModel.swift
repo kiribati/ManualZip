@@ -8,15 +8,18 @@
 import Combine
 import SwiftData
 import UIKit
+import SwiftUI
 
 // SwiftUI View와 데이터를 주고받기 위해 ObservableObject를 채택합니다.
 @MainActor
 class AddManualViewModel: ObservableObject {
     
-    @Published var board: String?
+    @Published var clipboardLink: String?
     
     // View의 TextField와 바인딩될 변수. @Published를 통해 변경사항이 View에 즉시 반영됩니다.
     @Published var name: String = ""
+    @Published var images: [UIImage] = []
+    @Published var links: [URL] = []
     
     init() {
         
@@ -41,7 +44,19 @@ class AddManualViewModel: ObservableObject {
     }
     
     func checkClipboard() {
-//        guard let board = UIPasteboard.general.string else { return nil }
-//        return board
+        guard let currentClipboardLink = UIPasteboard.general.url else { return }
+        
+        clipboardLink = currentClipboardLink.absoluteString
+    }
+    
+    func removeClipboard(_ target: String) {
+        guard let currentClipboardLink = UIPasteboard.general.url else { return }
+        
+        UIPasteboard.general.string = nil
+    }
+    
+    func addPhotos(_ newImages: [UIImage]) {
+        self.images.append(contentsOf: newImages)
     }
 }
+

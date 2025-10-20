@@ -5,16 +5,22 @@
 //  Created by hongdae on 9/28/25.
 //
 
-import Foundation
 import Combine
 import SwiftData
+import UIKit
 
 // SwiftUI View와 데이터를 주고받기 위해 ObservableObject를 채택합니다.
 @MainActor
 class AddManualViewModel: ObservableObject {
     
+    @Published var board: String?
+    
     // View의 TextField와 바인딩될 변수. @Published를 통해 변경사항이 View에 즉시 반영됩니다.
     @Published var name: String = ""
+    
+    init() {
+        
+    }
     
     // 저장 로직을 담당하는 함수
     // View로부터 ModelContext를 받아와서 데이터를 저장합니다.
@@ -32,5 +38,10 @@ class AddManualViewModel: ObservableObject {
         context.insert(newManual)
         
         return true
+    }
+    
+    func checkClipboard() {
+//        guard let board = UIPasteboard.general.string else { return nil }
+//        return board
     }
 }

@@ -14,10 +14,25 @@ final class ManualItem {
     @Attribute(.unique) var id: UUID
     var name: String
     var createdAt: Date
+    var links: [String]
+    var images: [Data]
+    var memo: String
     
-    init(name: String) {
+    init() {
+        self.id = UUID()
+        self.name = ""
+        self.createdAt = Date()
+        self.links = []
+        self.images = []
+        self.memo = ""
+    }
+    
+    init(name: String, links: [String], images: [Data], memo: String) {
         self.id = UUID()
         self.name = name
         self.createdAt = Date()
+        self.links = links
+        self.images = images
+        self.memo = memo
     }
 }

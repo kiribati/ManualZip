@@ -20,7 +20,7 @@ class AddManualViewModel: ObservableObject {
     @Published var name: String = ""
     @Published var images: [UIImage] = []
     @Published var links: [URL] = []
-    
+    @Published var memo: String = ""
     init() {
         
     }
@@ -34,8 +34,9 @@ class AddManualViewModel: ObservableObject {
             return false
         }
         
-        // 새로운 Manual 객체 생성
-        let newManual = ManualItem(name: name)
+        let linkList = links.map { $0.absoluteString }
+        let imageDataList = images.compactMap { $0.pngData() }
+        let newManual = ManualItem(name: name, links: linkList, images: imageDataList, memo: memo)
         
         // ModelContext에 객체 삽입 (데이터베이스에 추가)
         context.insert(newManual)
@@ -50,8 +51,6 @@ class AddManualViewModel: ObservableObject {
     }
     
     func removeClipboard(_ target: String) {
-        guard let currentClipboardLink = UIPasteboard.general.url else { return }
-        
         UIPasteboard.general.string = nil
     }
     

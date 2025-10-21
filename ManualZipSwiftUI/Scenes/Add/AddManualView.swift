@@ -19,17 +19,22 @@ struct AddManualView: View {
     @State private var isShowingPhotoPicker: Bool = false
     @State private var sourceType: UIImagePickerController.SourceType = .camera
     @State private var inputedLink: String = ""
+//    @State private var memo: String = ""
     
     var body: some View {
         NavigationStack {
             Form {
                 Section(header: Text("매뉴얼 정보")) {
                     TextField("매뉴얼 이름", text: $viewModel.name)
+                        .autocorrectionDisabled(true)
+                        .textInputAutocapitalization(.never)
                 }
                 
                 imageSelectionSection
                 
                 linkSection
+                
+                memoSection
             }
             .navigationTitle("새 매뉴얼 추가")
             .navigationBarTitleDisplayMode(.inline)
@@ -126,6 +131,8 @@ struct AddManualView: View {
             VStack(alignment: .leading, spacing: 12) {
                 HStack(spacing: 4) {
                     TextField("Link", text: $inputedLink)
+                        .autocorrectionDisabled(true)
+                        .textInputAutocapitalization(.never)
                         .padding(8)
                         .textFieldStyle(.roundedBorder)
                     
@@ -173,6 +180,15 @@ struct AddManualView: View {
                     }
                 }
             }
+        }
+    }
+    
+    private var memoSection: some View {
+        Section(header: Text("메모")) {
+            TextEditor(text: $viewModel.memo)
+                .autocorrectionDisabled(true)
+                .textInputAutocapitalization(.never)
+                .frame(minHeight: 120)
         }
     }
 }

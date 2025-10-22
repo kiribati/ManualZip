@@ -19,14 +19,14 @@ struct AddManualView: View {
     @State private var isShowingPhotoPicker: Bool = false
     @State private var sourceType: UIImagePickerController.SourceType = .camera
     @State private var inputedLink: String = ""
-//    @State private var memo: String = ""
     
     var body: some View {
         NavigationStack {
             Form {
-                Section(header: Text("매뉴얼 정보")) {
-                    TextField("매뉴얼 이름", text: $viewModel.name)
+                Section(header: Text("Add_Info".localized)) {
+                    TextField("Add_ManualName".localized, text: $viewModel.name)
                         .autocorrectionDisabled(true)
+                        .textContentType(.name)
                         .textInputAutocapitalization(.never)
                 }
                 
@@ -36,16 +36,16 @@ struct AddManualView: View {
                 
                 memoSection
             }
-            .navigationTitle("새 매뉴얼 추가")
+            .navigationTitle("새 매뉴얼 추가".localized)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("취소") {
+                    Button("취소".localized) {
                         dismiss()
                     }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("저장") {
+                    Button("저장".localized) {
                         if viewModel.save(context: modelContext) {
                             dismiss()
                         }
@@ -78,7 +78,7 @@ struct AddManualView: View {
     }
     
     private var imageSelectionSection: some View {
-        Section(header: Text("이미지")) {
+        Section(header: Text("이미지".localized)) {
             VStack (spacing: 8) {
                 HStack( spacing: 12) {
                     Button {
@@ -87,7 +87,7 @@ struct AddManualView: View {
                     } label: {
                         VStack(spacing: 4) {
                             Image(systemName: "camera")
-                            Text("카메라")
+                            Text("카메라".localized)
                         }
                     }
                     .buttonStyle(CardButtonStyle())
@@ -97,7 +97,7 @@ struct AddManualView: View {
                     } label: {
                         VStack(spacing: 4) {
                             Image(systemName: "photo")
-                            Text("앨범")
+                            Text("앨범".localized)
                         }
                     }
                     .buttonStyle(CardButtonStyle())
@@ -127,10 +127,11 @@ struct AddManualView: View {
     }
     
     private var linkSection: some View {
-        Section(header: Text("링크")) {
+        Section(header: Text("링크".localized)) {
             VStack(alignment: .leading, spacing: 12) {
                 HStack(spacing: 4) {
-                    TextField("Link", text: $inputedLink)
+                    TextField("Link".localized, text: $inputedLink)
+                        .textContentType(.URL)
                         .autocorrectionDisabled(true)
                         .textInputAutocapitalization(.never)
                         .padding(8)
@@ -143,7 +144,7 @@ struct AddManualView: View {
                             viewModel.links.append(url)
                             inputedLink = ""
                         } label: {
-                            Text("추가하기")
+                            Text("추가하기".localized)
                         }
                     }
                 }
@@ -156,7 +157,7 @@ struct AddManualView: View {
                         viewModel.removeClipboard(link)
 
                     } label: {
-                        Text("\(link) \n붙여넣기")
+                        Text("\(link) \n" + "붙여넣기".localized)
                             .padding(8)
                             .frame(maxWidth: .infinity)
                             .cornerRadius(10)
@@ -184,8 +185,9 @@ struct AddManualView: View {
     }
     
     private var memoSection: some View {
-        Section(header: Text("메모")) {
+        Section(header: Text("메모".localized)) {
             TextEditor(text: $viewModel.memo)
+                .textContentType(.name)
                 .autocorrectionDisabled(true)
                 .textInputAutocapitalization(.never)
                 .frame(minHeight: 120)

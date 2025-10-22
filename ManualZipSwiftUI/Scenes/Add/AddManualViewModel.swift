@@ -10,13 +10,9 @@ import SwiftData
 import UIKit
 import SwiftUI
 
-// SwiftUI View와 데이터를 주고받기 위해 ObservableObject를 채택합니다.
 @MainActor
-class AddManualViewModel: ObservableObject {
-    
+final class AddManualViewModel: ObservableObject {
     @Published var clipboardLink: String?
-    
-    // View의 TextField와 바인딩될 변수. @Published를 통해 변경사항이 View에 즉시 반영됩니다.
     @Published var name: String = ""
     @Published var images: [UIImage] = []
     @Published var links: [URL] = []
@@ -38,7 +34,6 @@ class AddManualViewModel: ObservableObject {
         let imageDataList = images.compactMap { $0.pngData() }
         let newManual = ManualItem(name: name, links: linkList, images: imageDataList, memo: memo)
         
-        // ModelContext에 객체 삽입 (데이터베이스에 추가)
         context.insert(newManual)
         
         return true

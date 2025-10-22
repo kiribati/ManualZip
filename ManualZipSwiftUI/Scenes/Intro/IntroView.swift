@@ -15,9 +15,8 @@ struct IntroView: View {
             ZStack {
                 Color.white.ignoresSafeArea()
 
-                // 서브 타이틀
                 VStack(spacing: 5) {
-                    Text("Effortlessly parse YouTube links.")
+                    Text("Save Find Share Manuals".localized)
                         .font(.headline)
                         .fontWeight(.semibold)
                         .foregroundColor(.black)

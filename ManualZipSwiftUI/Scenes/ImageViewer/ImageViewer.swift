@@ -10,11 +10,13 @@ import SwiftUI
 struct ImageViewer: View {
     @Environment(\.dismiss) var dismiss
     
-    let images: [Image]
+    private let images: [Image]
+    private let datas: [Data]
     @State private var currentIndex: Int
 
-    init(imagesData: [Data], startIndex: Int) {
-        self.images = imagesData.compactMap{ $0.toImage }
+    init(imagesDatas: [Data], startIndex: Int) {
+        self.datas = imagesDatas
+        self.images = imagesDatas.compactMap{ $0.toImage }
         self._currentIndex = State(initialValue: startIndex)
     }
     
@@ -27,7 +29,7 @@ struct ImageViewer: View {
                             ZoomableImage(image: image)
                                 .tag(index)
                         } else {
-                            Text("이미지 로드 실패").foregroundColor(.white)
+                            Text("이미지 로드 실패".localized).foregroundColor(.white)
                         }
                     }
                 }
@@ -55,7 +57,7 @@ struct ImageViewer: View {
                 
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
-                        
+                        save()
                     } label: {
                         Image(systemName: "square.and.arrow.down")
                             .tint(Color.white)
@@ -95,6 +97,12 @@ struct ImageViewer: View {
                 }
             }
         }
+    }
+    
+    private func save() {
+        guard let currentData = datas.safty(currentIndex), let currentUIImage = UIImage(data: currentData) else { return }
+        
+        ImageSaver().writeToPhotoAlbum(image: currentUIImage)
     }
 }
 
@@ -137,9 +145,6 @@ extension ImageViewer {
                 withAnimation(.spring) {
                     scale = scale > minScale ? minScale : 2.0
                 }
-            }
-            .onDisappear {
-//                scale = minScale
             }
             .onAppear {
                 scale = minScale

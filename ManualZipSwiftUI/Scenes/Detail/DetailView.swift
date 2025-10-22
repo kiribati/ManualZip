@@ -32,7 +32,7 @@ struct DetailView: View {
                         
                         // Images
                         if viewModel.item.images.isNotEmpty {
-                            Section(header: Text("이미지").font(.headline)) {
+                            Section(header: Text("이미지".localized).font(.headline)) {
                                 ScrollView(.horizontal, showsIndicators: false) {
                                     HStack(spacing: 15) {
                                         ForEach(viewModel.item.images.indices, id: \.self) { index in
@@ -57,9 +57,8 @@ struct DetailView: View {
                             Divider()
                         }
                         
-                        // Links
                         if viewModel.item.links.isNotEmpty {
-                            Section(header: Text("링크").font(.headline)) {
+                            Section(header: Text("링크".localized).font(.headline)) {
                                 VStack(alignment: .leading, spacing: 10) {
                                     ForEach(viewModel.item.links, id: \.self) { link in
                                         if let url = URL(string: link) {
@@ -77,7 +76,7 @@ struct DetailView: View {
                         }
                         
                         if viewModel.item.memo.isNotEmpty {
-                            Section(header: Text("메모").font(.headline)) {
+                            Section(header: Text("메모".localized).font(.headline)) {
                                 Text(viewModel.item.memo)
                                     .font(.body)
                                     .foregroundStyle(.primary)
@@ -91,7 +90,7 @@ struct DetailView: View {
         }
         .sheet(item: $selectedImageIndexItem) { item in
             NavigationStack {
-                ImageViewer(imagesData: viewModel.item.images, startIndex: item.index)
+                ImageViewer(imagesDatas: viewModel.item.images, startIndex: item.index)
             }
         }
     }

@@ -10,6 +10,7 @@ import SwiftUI
 struct DetailView: View {
     @StateObject private var viewModel: DetailViewModel
     @State private var selectedImageIndexItem: ImageIndexItem? = nil
+    @State private var showEditModal: Bool = false
     
     init(viewModel: DetailViewModel) {
         self._viewModel = StateObject(wrappedValue: viewModel)
@@ -88,10 +89,22 @@ struct DetailView: View {
                 }
             }
         }
+        .toolbar(content: {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    
+                } label: {
+                    Image(systemName: "pencil")
+                }
+            }
+        })
         .sheet(item: $selectedImageIndexItem) { item in
             NavigationStack {
                 ImageViewer(imagesDatas: viewModel.item.images, startIndex: item.index)
             }
+        }
+        .sheet(isPresented: $showEditModal) {
+            AddManualView()
         }
     }
 }

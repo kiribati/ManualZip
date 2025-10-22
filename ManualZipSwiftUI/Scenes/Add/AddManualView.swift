@@ -63,7 +63,7 @@ struct AddManualView: View {
             }
             .onChange(of: selectedImage) { _, newImage in
                 if let image = newImage {
-                    viewModel.addPhotos([image])
+                    viewModel.images.append(image)
                     selectedImage = nil
                 }
             }
@@ -71,15 +71,17 @@ struct AddManualView: View {
                 PhotoPicker(images: $selectedPhotos)
             }
             .onChange(of: selectedPhotos) { _, newImages in
-                viewModel.addPhotos(newImages)
-                selectedPhotos.removeAll()
+                for image in newImages {
+                    selectedPhotos.removeAll(where: { $0.hashValue == image.hashValue })
+                    viewModel.images.append(image)
+                }
             }
         }
     }
     
     private var imageSelectionSection: some View {
         Section(header: Text("이미지".localized)) {
-            VStack (spacing: 8) {
+            VStack (spacing: 14) {
                 HStack( spacing: 12) {
                     Button {
                         sourceType = .camera
@@ -104,20 +106,16 @@ struct AddManualView: View {
                 }
 
                 if viewModel.images.isNotEmpty {
+                    Divider()
+                    
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 15) {
                             ForEach(viewModel.images.indices, id: \.self) { index in
                                 let uiImage = viewModel.images[index]
-                                Image(uiImage: uiImage)
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: 100, height: 100)
-                                    .background(Color(.black))
-                                    .clipShape(RoundedRectangle(cornerRadius: 12))
-                                    .overlay {
-                                        RoundedRectangle(cornerRadius: 12)
-                                            .stroke(Color.gray.opacity(0.3), lineWidth: 1)
-                                    }
+                                AddImageCell(uiImage: uiImage, index: index) { deleteIndex in
+                                    viewModel.delete(image: deleteIndex)
+                                }
+                                .frame(height: 120)
                             }
                         }
                     }

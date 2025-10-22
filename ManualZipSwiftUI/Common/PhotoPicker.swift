@@ -46,10 +46,10 @@ struct PhotoPicker: UIViewControllerRepresentable {
             
             for result in results {
                 if result.itemProvider.canLoadObject(ofClass: UIImage.self) {
-                    result.itemProvider.loadObject(ofClass: UIImage.self) { image, error in
+                    result.itemProvider.loadObject(ofClass: UIImage.self) { [weak self] image, error in
                         if let image = image as? UIImage {
                             DispatchQueue.main.async {
-                                self.parent.images.append(image)
+                                self?.parent.images.append(image)
                             }
                         }
                     }

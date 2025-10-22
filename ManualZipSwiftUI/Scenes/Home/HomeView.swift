@@ -50,7 +50,7 @@ struct HomeView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
-                        isShowingAddSheet = true // 버튼을 누르면 isShowingAddSheet이 true로 변경
+                        isShowingAddSheet = true
                     } label: {
                         Image(systemName: "plus")
                     }
@@ -60,6 +60,7 @@ struct HomeView: View {
                 AddManualView()
             }
         }
+        .background(.ultraThinMaterial)
     }
 }
 

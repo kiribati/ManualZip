@@ -17,6 +17,11 @@ final class AddManualViewModel: ObservableObject {
     @Published var images: [UIImage] = []
     @Published var links: [URL] = []
     @Published var memo: String = ""
+    
+    deinit {
+        print("\(Self.self) deinited")
+    }
+    
     init() {
         
     }
@@ -49,8 +54,8 @@ final class AddManualViewModel: ObservableObject {
         UIPasteboard.general.string = nil
     }
     
-    func addPhotos(_ newImages: [UIImage]) {
-        self.images.append(contentsOf: newImages)
+    func delete(image index: Int) {
+        images.remove(at: index)
     }
 }
 

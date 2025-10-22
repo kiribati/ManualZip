@@ -9,6 +9,7 @@ import SwiftUI
 
 struct DetailView: View {
     @StateObject private var viewModel: DetailViewModel
+    @State private var selectedImageIndexItem: ImageIndexItem? = nil
     
     init(viewModel: DetailViewModel) {
         self._viewModel = StateObject(wrappedValue: viewModel)
@@ -34,8 +35,8 @@ struct DetailView: View {
                             Section(header: Text("이미지").font(.headline)) {
                                 ScrollView(.horizontal, showsIndicators: false) {
                                     HStack(spacing: 15) {
-                                        ForEach(viewModel.item.images, id: \.self) { data in
-                                            if let image = UIImage(data: data) {
+                                        ForEach(viewModel.item.images.indices, id: \.self) { index in
+                                            if let data = viewModel.item.images.safty(index), let image = UIImage(data: data) {
                                                 Image(uiImage: image)
                                                     .resizable()
                                                     .scaledToFill()
@@ -45,6 +46,9 @@ struct DetailView: View {
                                                         RoundedRectangle(cornerRadius: 12)
                                                             .stroke(Color.gray.opacity(0.3), lineWidth: 1)
                                                     )
+                                                    .onTapGesture {
+                                                        selectedImageIndexItem = ImageIndexItem(index: index)
+                                                    }
                                             }
                                         }
                                     }
@@ -84,6 +88,23 @@ struct DetailView: View {
                     }
                 }
             }
+        }
+        .sheet(item: $selectedImageIndexItem) { item in
+            NavigationStack {
+                ImageViewer(imagesData: viewModel.item.images, startIndex: item.index)
+            }
+        }
+    }
+}
+
+extension DetailView {
+    struct ImageIndexItem: Identifiable {
+        let id: Int
+        let index: Int
+        
+        init(index: Int) {
+            self.id = index
+            self.index = index
         }
     }
 }

@@ -53,7 +53,7 @@ struct HomeView: View {
                 AddManualView()
             }
             .navigationTitle("내 매뉴얼".localized)
-            .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .automatic))
+//            .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .automatic))
         }
         .background(.ultraThinMaterial)
     }

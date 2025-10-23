@@ -18,6 +18,10 @@ final class ManualItem {
     var images: [Data]
     var memo: String
     
+    @Relationship(deleteRule: .cascade, inverse: \FileItem.manualItem)
+    var files: [FileItem]
+    
+    
     init() {
         self.id = UUID()
         self.name = ""
@@ -25,14 +29,37 @@ final class ManualItem {
         self.links = []
         self.images = []
         self.memo = ""
+        self.files = []
     }
     
-    init(name: String, links: [String], images: [Data], memo: String) {
+    init(name: String, links: [String], images: [Data], memo: String, files: [FileItem]) {
         self.id = UUID()
         self.name = name
         self.createdAt = Date()
         self.links = links
         self.images = images
         self.memo = memo
+        self.files = files
+    }
+}
+
+
+extension ManualItem {
+    @Model
+    class FileItem {
+        var id: UUID
+        var filename: String
+        var creationDate: Date
+        var manualItem: ManualItem?
+        
+        @Attribute(.externalStorage)
+        var fileData: Data?
+        
+        init(filename: String, fileData: Data) {
+            self.id = UUID()
+            self.filename = filename
+            self.creationDate = Date()
+            self.fileData = fileData
+        }
     }
 }

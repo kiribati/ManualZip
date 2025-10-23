@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+internal import UniformTypeIdentifiers
 
 struct AddManualView: View {
     @StateObject private var viewModel: AddManualViewModel
@@ -19,6 +20,7 @@ struct AddManualView: View {
     @State private var isShowingPhotoPicker: Bool = false
     @State private var sourceType: UIImagePickerController.SourceType = .camera
     @State private var inputedLink: String = ""
+    @State private var isShowingFileImporter: Bool = false
     
     init() {
         self._viewModel = StateObject(wrappedValue: AddManualViewModel())
@@ -43,6 +45,8 @@ struct AddManualView: View {
                 linkSection
                 
                 memoSection
+                
+                fileImportSection
             }
             .navigationTitle(viewModel.title)
             .navigationBarTitleDisplayMode(.inline)
@@ -84,9 +88,18 @@ struct AddManualView: View {
                     viewModel.images.append(image)
                 }
             }
+            .fileImporter(isPresented: $isShowingFileImporter,
+                          allowedContentTypes: [.pdf, .png, .gif, .jpeg],
+                          allowsMultipleSelection: true) { result in
+                handleFilesPick(result)
+            }
         }
+        .scrollDismissesKeyboard(.interactively)
     }
-    
+}
+
+//  MARK: - Section View
+extension AddManualView {
     private var imageSelectionSection: some View {
         Section(header: Text("이미지".localized)) {
             VStack (spacing: 14) {
@@ -172,8 +185,8 @@ struct AddManualView: View {
                 }
 
                 if viewModel.links.isNotEmpty {
-                    ForEach(viewModel.links, id: \.absoluteString) { link in
-                        VStack(spacing: 6) {
+                    VStack(spacing: 6) {
+                        ForEach(viewModel.links, id: \.absoluteString) { link in
                             HStack(spacing: 4) {
                                 Text(link.absoluteString)
                                     .frame(maxWidth: .infinity)
@@ -197,6 +210,64 @@ struct AddManualView: View {
                 .autocorrectionDisabled(true)
                 .textInputAutocapitalization(.never)
                 .frame(minHeight: 120)
+        }
+    }
+    
+    private var fileImportSection: some View {
+        Section(header: Text("파일 추가".localized)) {
+            Button {
+                isShowingFileImporter = true
+            } label: {
+                Text("File".localized)
+            }
+            
+            ForEach(viewModel.files) { file in
+                Text(file.filename)
+                    .frame(maxWidth: .infinity)
+            }
+            .onDelete(perform: onDeleteFile(offsets:))
+        }
+    }
+}
+
+//  MARK: - Action
+extension AddManualView {
+    private func onDeleteFile(offsets: IndexSet) {
+        for index in offsets {
+            if let fileToDelete = viewModel.files.safty(index) {
+                modelContext.delete(fileToDelete)
+                viewModel.delete(file: index)
+            }
+        }
+    }
+    
+    private func handleFilesPick(_ result: Result<[URL], Error>) {
+        switch result {
+        case .success(let urls):
+            // 선택된 모든 URL에 대해 반복
+            for url in urls {
+                // 파일 데이터 접근 권한 시작
+                guard url.startAccessingSecurityScopedResource() else {
+                    print("Error: 보안 리소스 접근 실패 - \(url.lastPathComponent)")
+                    continue // 다음 파일로 넘어감
+                }
+                
+                do {
+                    let fileData = try Data(contentsOf: url)
+                    let filename = url.lastPathComponent
+                    
+                    // 새 FileItem 생성
+                    let newFile = ManualItem.FileItem(filename: filename, fileData: fileData)
+                    viewModel.files.append(newFile)
+                } catch {
+                    print("Error: 파일 데이터 읽기 실패 - \(error.localizedDescription)")
+                }
+                
+                // 권한 해제
+                url.stopAccessingSecurityScopedResource()
+            }
+        case .failure(let error):
+            print("Error: 파일 선택 실패 - \(error.localizedDescription)")
         }
     }
 }

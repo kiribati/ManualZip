@@ -82,6 +82,19 @@ struct DetailView: View {
                             }
                             Divider()
                         }
+                        
+                        if item.files.isNotEmpty {
+                            Section(header: Text("File".localized).font(.headline)) {
+                                VStack(alignment: .leading, spacing: 6) {
+                                    ForEach(item.files, id: \.self) { file in
+                                        NavigationLink(destination: FileDisplayView(file: file)) {
+                                            Text(file.filename)
+                                                .frame(minHeight: 24)
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }

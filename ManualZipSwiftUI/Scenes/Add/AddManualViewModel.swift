@@ -18,6 +18,7 @@ final class AddManualViewModel: ObservableObject {
     @Published var links: [URL] = []
     @Published var memo: String = ""
     @Published var title: String = ""
+    @Published var files: [ManualItem.FileItem] = []
     private var editedItem: ManualItem?
     
     deinit {
@@ -35,6 +36,7 @@ final class AddManualViewModel: ObservableObject {
         self.images = item.images.compactMap{ UIImage(data: $0) }
         self.links = item.links.compactMap{ URL(string: $0) }
         self.memo = item.memo
+        self.files = item.files
         
         title = "EditManual".localized
     }
@@ -63,6 +65,10 @@ final class AddManualViewModel: ObservableObject {
     func delete(image index: Int) {
         images.remove(at: index)
     }
+    
+    func delete(file index: Int) {
+        files.remove(at: index)
+    }
 }
 
 extension AddManualViewModel {
@@ -75,7 +81,7 @@ extension AddManualViewModel {
         
         let linkList = links.map { $0.absoluteString }
         let imageDataList = images.compactMap { $0.pngData() }
-        let newManual = ManualItem(name: name, links: linkList, images: imageDataList, memo: memo)
+        let newManual = ManualItem(name: name, links: linkList, images: imageDataList, memo: memo, files: files)
         
         context.insert(newManual)
         
@@ -94,6 +100,7 @@ extension AddManualViewModel {
             item.images = images.compactMap { $0.pngData() }
             item.links = links.map { $0.absoluteString }
             item.memo = memo
+            item.files = files
             
             try context.save()
             print("수정 저장 성공")

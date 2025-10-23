@@ -37,9 +37,22 @@
 		C0E25D292E8949C800E372C0 /* ManualZipSwiftUIUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ManualZipSwiftUIUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		7081E99B2EAA28E10061C6D8 /* Exceptions for "ManualZipSwiftUI" folder in "ManualZipSwiftUI" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = C0E25D0F2E8949C700E372C0 /* ManualZipSwiftUI */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		C0E25D122E8949C700E372C0 /* ManualZipSwiftUI */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				7081E99B2EAA28E10061C6D8 /* Exceptions for "ManualZipSwiftUI" folder in "ManualZipSwiftUI" target */,
+			);
 			path = ManualZipSwiftUI;
 			sourceTree = "<group>";
 		};
@@ -418,10 +431,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = BEPX5JM7L4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ManualZipSwiftUI/Info.plist;
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Use when upload manual images";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Use when upload and sve manual images";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -457,10 +472,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = BEPX5JM7L4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ManualZipSwiftUI/Info.plist;
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Use when upload manual images";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Use when upload and sve manual images";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

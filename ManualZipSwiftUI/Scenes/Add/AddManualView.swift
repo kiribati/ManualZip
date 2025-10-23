@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct AddManualView: View {
-    @StateObject private var viewModel = AddManualViewModel()
+    @StateObject private var viewModel: AddManualViewModel
     
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
@@ -19,6 +19,14 @@ struct AddManualView: View {
     @State private var isShowingPhotoPicker: Bool = false
     @State private var sourceType: UIImagePickerController.SourceType = .camera
     @State private var inputedLink: String = ""
+    
+    init() {
+        self._viewModel = StateObject(wrappedValue: AddManualViewModel())
+    }
+    
+    init(item: ManualItem) {
+        self._viewModel = StateObject(wrappedValue: AddManualViewModel(item: item))
+    }
     
     var body: some View {
         NavigationStack {
@@ -36,7 +44,7 @@ struct AddManualView: View {
                 
                 memoSection
             }
-            .navigationTitle("새 매뉴얼 추가".localized)
+            .navigationTitle(viewModel.title)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {

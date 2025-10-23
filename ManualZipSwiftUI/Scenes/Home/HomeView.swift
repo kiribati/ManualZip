@@ -24,9 +24,7 @@ struct HomeView: View {
                 } else {
                     ForEach(manuals) { manual in
                         NavigationLink(destination: {
-                            let parameter = DetailViewModel.Parameter(item: manual)
-                            let viewModel = DetailViewModel(parameter: parameter)
-                            DetailView(viewModel: viewModel)
+                            DetailView(item: manual)
                         }, label: {
                             VStack(alignment: .leading) {
                                 Text(manual.name)

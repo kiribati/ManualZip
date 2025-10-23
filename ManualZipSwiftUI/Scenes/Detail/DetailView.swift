@@ -8,13 +8,10 @@
 import SwiftUI
 
 struct DetailView: View {
-    @StateObject private var viewModel: DetailViewModel
     @State private var selectedImageIndexItem: ImageIndexItem? = nil
     @State private var showEditModal: Bool = false
-    
-    init(viewModel: DetailViewModel) {
-        self._viewModel = StateObject(wrappedValue: viewModel)
-    }
+    @Bindable var item: ManualItem
+    @Environment(\.modelContext) private var modelContext
     
     var body: some View {
         NavigationStack {
@@ -23,21 +20,21 @@ struct DetailView: View {
                     VStack(alignment: .leading, spacing: 20) {
                         // Name & Date
                         VStack(alignment: .leading, spacing: 6) {
-                            Text(viewModel.item.name)
+                            Text(item.name)
                                 .font(.largeTitle).bold()
-                            Text(viewModel.item.createdAt.toString("yyyy.MM.dd"))
+                            Text(item.createdAt.toString("yyyy.MM.dd"))
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }
                         Divider()
                         
                         // Images
-                        if viewModel.item.images.isNotEmpty {
+                        if item.images.isNotEmpty {
                             Section(header: Text("이미지".localized).font(.headline)) {
                                 ScrollView(.horizontal, showsIndicators: false) {
                                     HStack(spacing: 15) {
-                                        ForEach(viewModel.item.images.indices, id: \.self) { index in
-                                            if let data = viewModel.item.images.safty(index), let image = UIImage(data: data) {
+                                        ForEach(item.images.indices, id: \.self) { index in
+                                            if let data = item.images.safty(index), let image = UIImage(data: data) {
                                                 Image(uiImage: image)
                                                     .resizable()
                                                     .scaledToFill()
@@ -58,10 +55,10 @@ struct DetailView: View {
                             Divider()
                         }
                         
-                        if viewModel.item.links.isNotEmpty {
+                        if item.links.isNotEmpty {
                             Section(header: Text("링크".localized).font(.headline)) {
                                 VStack(alignment: .leading, spacing: 10) {
-                                    ForEach(viewModel.item.links, id: \.self) { link in
+                                    ForEach(item.links, id: \.self) { link in
                                         if let url = URL(string: link) {
                                             Link(destination: url) {
                                                 HStack(spacing: 8) {
@@ -76,9 +73,9 @@ struct DetailView: View {
                             Divider()
                         }
                         
-                        if viewModel.item.memo.isNotEmpty {
+                        if item.memo.isNotEmpty {
                             Section(header: Text("메모".localized).font(.headline)) {
-                                Text(viewModel.item.memo)
+                                Text(item.memo)
                                     .font(.body)
                                     .foregroundStyle(.primary)
                                     .padding(.top, 2)
@@ -92,19 +89,19 @@ struct DetailView: View {
         .toolbar(content: {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
-                    
+                    showEditModal = true
                 } label: {
                     Image(systemName: "pencil")
                 }
             }
         })
-        .sheet(item: $selectedImageIndexItem) { item in
+        .sheet(item: $selectedImageIndexItem) { indexItem in
             NavigationStack {
-                ImageViewer(imagesDatas: viewModel.item.images, startIndex: item.index)
+                ImageViewer(imagesDatas: item.images, startIndex: indexItem.index)
             }
         }
         .sheet(isPresented: $showEditModal) {
-            AddManualView()
+            AddManualView(item: item)
         }
     }
 }
@@ -119,10 +116,14 @@ extension DetailView {
             self.index = index
         }
     }
+    
+    private func load(manual id: UUID) {
+        
+    }
 }
 
 
 #Preview {
-    DetailView(viewModel: .init(parameter: .init(item: .init())))
+    DetailView(item: .init())
 }
 

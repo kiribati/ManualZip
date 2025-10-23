@@ -35,6 +35,23 @@
         }
       }
     },
+    "EditManual" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit manual"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "매뉴얼 수정"
+          }
+        }
+      }
+    },
     "Link" : {
       "comment" : "A label for the link input field.",
       "extractionState" : "manual",

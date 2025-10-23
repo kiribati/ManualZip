@@ -69,6 +69,7 @@ extension AddManualViewModel {
     private func save(insert context: ModelContext) -> Bool {
         // 간단한 유효성 검사: 이름이 비어있으면 저장하지 않음
         guard !name.trimmingCharacters(in: .whitespaces).isEmpty else {
+            print("신규 저장 실패 - 이름이 없어요")
             return false
         }
         
@@ -78,11 +79,13 @@ extension AddManualViewModel {
         
         context.insert(newManual)
         
+        print("신규 저장 성공")
         return true
     }
     
     private func save(edit item: ManualItem, with context: ModelContext) -> Bool {
         guard !name.trimmingCharacters(in: .whitespaces).isEmpty else {
+            print("수정 저장 실패 - 이름이 없어요")
             return false
         }
         
@@ -93,8 +96,10 @@ extension AddManualViewModel {
             item.memo = memo
             
             try context.save()
+            print("수정 저장 성공")
             return true
         } catch {
+            print("수정 저장 실패")
             return false
         }
     }

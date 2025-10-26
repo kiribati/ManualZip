@@ -1,5 +1,7 @@
 # ManualZip
 
+https://apps.apple.com/app/id6752211957
+
 **나만의 디지털 매뉴얼 & 기록 보관소**
 
 > **ManualZip**은 일상 속의 중요한 매뉴얼, 지침, 레시피 등을
